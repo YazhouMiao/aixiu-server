@@ -1,8 +1,19 @@
 body {
-  padding: 50px;
+  padding: 0 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+.header{
+  height: 50px;
+}
+.footer{
+  margin: 50px 200px;
+  text-align: center;
+}
+.content{
+  min-height: 500px;
 }
