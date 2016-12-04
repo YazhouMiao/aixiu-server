@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 var dbUrl = require('./config').dbUrl;
 
-exports.connect = function () {
-    mongoose.createConnection(dbUrl);
-    console.log('db connected');
-};
+// 连接数据库
+mongoose.createConnection(dbUrl);
 
-console.log('db connecting');
+console.log('connections:'+mongoose.connections.length);
+
+module.exports = mongoose.connection;

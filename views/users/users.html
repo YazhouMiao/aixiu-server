@@ -10,6 +10,9 @@
 <%- include('../common/header.html',{title:'Titles'}) %>
 <div class="content">
     <p>What's your name?</p>
+    <% for(users of user){ %>
+    <div><%=user.name%></div>
+    <% }%>
 </div>
 <%- include('../common/footer.html')%>
 </body>
