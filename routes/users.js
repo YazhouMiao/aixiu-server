@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 
 /* insert test data */
 router.get('/insert', function(req, res, next) {
-  userModel.insetTestData(100000,function(err){
+  userModel.insetTestData(req.params.num || 1000,function(err){
     if(err)
       throw err;
 
