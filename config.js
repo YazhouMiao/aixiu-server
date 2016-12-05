@@ -3,4 +3,10 @@
  * 应用配置信息
  */
 
-exports.dbUrl = 'mongodb://admin:MYzhou1991@localhost:27017/aixiu';
+// MongoDB配置信息
+exports.db = {
+    host: 'localhost',
+    port: 27017,
+    user: 'admin',
+    pwd:  'MYzhou1991'
+};
