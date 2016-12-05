@@ -9,7 +9,17 @@
 <body>
 <%- include('../common/header.html',{title:'Titles'}) %>
 <div class="content">
-    <p>What's your name?</p>
+    <h3>User's Info:</h3>
+    <% for(let i=0;i<users.length;i++){ %>
+    <div>
+        <span><%= i+1 %></span>&nbsp;&nbsp;
+        <span><%= users[i].name%></span>&nbsp;&nbsp;
+        <span><%= users[i].sex%></span>&nbsp;&nbsp;
+        <span><%= users[i].age%></span>&nbsp;&nbsp;
+        <span><%= users[i].job%></span>&nbsp;&nbsp;
+        <span><%= users[i].country%></span>&nbsp;&nbsp;
+    </div>
+    <% }%>
 </div>
 <%- include('../common/footer.html')%>
 </body>
