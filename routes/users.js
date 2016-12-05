@@ -4,11 +4,11 @@ var userModel = require('../models/user');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  userModel.userList(function(err,users){
+  userModel.user(req.query,function(err,users){
     if(err)
       throw err;
 
-    res.render('./users/users', {title: 'Route',app: 'New App',users:users});
+    res.render('./users/users', {title:'users',users:users});
   })
 });
 
