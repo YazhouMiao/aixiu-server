@@ -49,17 +49,22 @@ exports.user = function(condition={},callback) {
 }
 
 // 插入测试数据
-exports.insetTestData = function (nums,callback) {
-    nums = nums || 10000;
-    for(let i=0;i<nums;i++){
-        let user = new User({
-            name: 'name'+i,
-            age: i%60,
-            sex: i%2,
-            job: 'job'+i,
-            country: 'contry'+i,
-        });
+function insetTestData(num,callback) {
+    if(num === 0) callback();
 
-        user.save(callback);
-    }
+    num = num || 1000;
+
+    let user = new User({
+        name: 'name'+num,
+        age: num%60,
+        sex: num%2,
+        job: 'job'+num,
+        country: 'contry'+num,
+    });
+
+    user.save(function(){
+        insertTestData(--num,callback);
+    });
 }
+
+exports.insetTestData = insetTestData;

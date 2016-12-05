@@ -14,12 +14,17 @@ router.get('/', function(req, res, next) {
 
 /* insert test data */
 router.get('/insert', function(req, res, next) {
-  userModel.insetTestData(req.params.num || 1000,function(err){
-    if(err)
-      throw err;
+  try{
+    userModel.insetTestData(req.query.num || 1000,function(err){
+      if(err)
+        throw err;
 
-    res.send('test added!');
-  })
+      res.send('test added!');
+    })
+  }catch (err){
+    res.send('add test data failed!');
+  }
+
 });
 
 module.exports = router;
