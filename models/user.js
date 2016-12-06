@@ -50,21 +50,19 @@ exports.user = function(condition={},callback) {
 
 // 插入测试数据
 function insetTestData(num,callback) {
-    if(num === 0) callback();
-
     num = num || 1000;
 
-    let user = new User({
-        name: 'name'+num,
-        age: num%60,
-        sex: num%2,
-        job: 'job'+num,
-        country: 'contry'+num,
-    });
+    for(let i=0;i<num;i++){
+        let user = new User({
+            name: 'name'+num,
+            age: num%60,
+            sex: num%2,
+            job: 'job'+num,
+            country: 'contry'+num,
+        });
 
-    user.save(function(){
-        insertTestData(--num,callback);
-    });
+        user.save(callback);
+    }
 }
 
 exports.insetTestData = insetTestData;
