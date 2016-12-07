@@ -14,11 +14,11 @@ router.get('/', function(req, res, next) {
 
 /* insert test data */
 router.get('/insert', function(req, res, next) {
-    userModel.insetTestData(req.query.num,function(err){
+    userModel.insetTestData(req.query.num,function(err,num){
       if(err)
         throw err;
 
-      res.send('test added!');
+      res.send(num+' test data added!');
     })
 });
 

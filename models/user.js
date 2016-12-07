@@ -1,5 +1,3 @@
-// var mongoose = require('mongoose');
-// var db = require('../db');
 var async = require('async');
 var mongoose = require('mongoose');
 var dbConfig = require('../config').db;
@@ -29,8 +27,6 @@ var User = conn.model('User',UserSchema);
 
 // 获取用户列表
 exports.user = function(condition={},callback) {
-    console.log(condition);
-
     let queryCon = {};
     // 姓名
     if(condition.name!==undefined){
@@ -49,26 +45,29 @@ exports.user = function(condition={},callback) {
 }
 
 // 插入测试数据
-function insetTestData(num,callback) {
-    num = !isNaN(num) ? num : 100;
+exports.insetTestData = function insetTestData(num,fn) {
+    num = !isNaN(num) ? num : 1;
 
-    let counter = 0;
-    async.whilst(function(){
-        return counter <= num;
-    },function (callback) {
-        counter++;
-        let user = new User({
-            name: 'name'+counter,
-            age: counter%60,
-            sex: counter%2,
-            job: 'job'+counter,
-            country: 'contry'+counter,
+    User.count({},function (err, sum) {
+        let counter = 0;
+
+        async.whilst(function(){
+            return counter < num;
+        },function (callback) {
+            counter++;
+            let user = new User({
+                name: 'name'+(counter+sum),
+                age: (counter+sum)%60,
+                sex: (counter+sum)%2,
+                job: 'job'+(counter+sum),
+                country: 'contry'+(counter+sum),
+            });
+
+            user.save();
+
+            callback(null,counter);
+        },function(err,counter){
+            fn(err,counter);
         });
-
-        user.save();
-    },function(err){
-        callback(err);
     });
 }
-
-exports.insetTestData = insetTestData;
