@@ -4,22 +4,22 @@ var userModel = require('../models/user');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  userModel.userList(function(err,users){
+  userModel.user(req.query,function(err,users){
     if(err)
       throw err;
 
-    res.render('./users/users', {title: 'Route',app: 'New App',users:users});
+    res.render('./users/users', {title:'users',users:users});
   })
 });
 
 /* insert test data */
 router.get('/insert', function(req, res, next) {
-  userModel.insetTestData(req.params.num || 1000,function(err){
-    if(err)
-      throw err;
+    userModel.insetTestData(req.query.num,function(err,num){
+      if(err)
+        throw err;
 
-    res.send('test added!');
-  })
+      res.send(num+' test data added!');
+    })
 });
 
 module.exports = router;

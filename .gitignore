@@ -7,5 +7,6 @@ local.properties
 # node.js
 #
 node_modules/
+test/
 npm-debug.log
 npm-debug.log.*

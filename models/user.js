@@ -1,6 +1,4 @@
-// var mongoose = require('mongoose');
-// var db = require('../db');
-
+var async = require('async');
 var mongoose = require('mongoose');
 var dbConfig = require('../config').db;
 
@@ -28,23 +26,48 @@ var UserSchema = new Schema({
 var User = conn.model('User',UserSchema);
 
 // 获取用户列表
-exports.userList = function(callback) {
-    console.log('finding');
-    User.find({},callback);
+exports.user = function(condition={},callback) {
+    let queryCon = {};
+    // 姓名
+    if(condition.name!==undefined){
+        queryCon.name = condition.name;
+    }
+    // 性别
+    if(condition.sex!==undefined){
+        queryCon.sex = condition.sex;
+    }
+    // 年龄
+    if(condition.age!==undefined){
+        queryCon.age = condition.age;
+    }
+
+    User.find(queryCon,callback);
 }
 
 // 插入测试数据
-exports.insetTestData = function (nums,callback) {
-    nums = nums || 10000;
-    for(let i=0;i<nums;i++){
-        let user = new User({
-            name: 'name'+i,
-            age: i%60,
-            sex: i%2,
-            job: 'job'+i,
-            country: 'contry'+i,
-        });
+exports.insetTestData = function insetTestData(num,fn) {
+    num = !isNaN(num) ? num : 1;
 
-        user.save(callback);
-    }
+    User.count({},function (err, sum) {
+        let counter = 0;
+
+        async.whilst(function(){
+            return counter < num;
+        },function (callback) {
+            counter++;
+            let user = new User({
+                name: 'name'+(counter+sum),
+                age: (counter+sum)%60,
+                sex: (counter+sum)%2,
+                job: 'job'+(counter+sum),
+                country: 'contry'+(counter+sum),
+            });
+
+            user.save();
+
+            callback(null,counter);
+        },function(err,counter){
+            fn(err,counter);
+        });
+    });
 }

@@ -27,6 +27,10 @@ if (cluster.isMaster) {
   }
   cluster.on('exit', function(worker, code, signal) {
     console.log('worker ' + worker.process.pid + ' died');
+
+    // 重启进程
+    cluster.fork();
+    console.log('died worker restarted');
   });
 } else {
 
