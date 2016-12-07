@@ -1,6 +1,6 @@
 // var mongoose = require('mongoose');
 // var db = require('../db');
-
+var async = require('async');
 var mongoose = require('mongoose');
 var dbConfig = require('../config').db;
 
@@ -50,19 +50,25 @@ exports.user = function(condition={},callback) {
 
 // 插入测试数据
 function insetTestData(num,callback) {
-    num = num || 1000;
+    num = !isNaN(num) ? num : 100;
 
-    for(let i=0;i<num;i++){
+    let counter = 0;
+    async.whilst(function(){
+        return counter <= num;
+    },function (callback) {
+        counter++;
         let user = new User({
-            name: 'name'+num,
-            age: num%60,
-            sex: num%2,
-            job: 'job'+num,
-            country: 'contry'+num,
+            name: 'name'+counter,
+            age: counter%60,
+            sex: counter%2,
+            job: 'job'+counter,
+            country: 'contry'+counter,
         });
 
-        user.save(callback);
-    }
+        user.save();
+    },function(err){
+        callback(err);
+    });
 }
 
 exports.insetTestData = insetTestData;
