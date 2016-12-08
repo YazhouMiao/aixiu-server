@@ -43,6 +43,12 @@ if (cluster.isMaster) {
   server.listen(port);
   server.on('error', onError);
   server.on('listening', onListening);
+
+  // 接收到终止主进程信号
+  process.on('SIGINT',function(){
+    // TODO:
+    console.log('main proccess died!');
+  });
 }
 
 /**
