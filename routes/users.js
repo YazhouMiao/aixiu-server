@@ -22,4 +22,14 @@ router.get('/insert', function(req, res, next) {
     })
 });
 
+/* delete test data */
+router.get('/delete', function(req, res, next) {
+    userModel.deleteUser(req.query,function(err,result){
+        if(err)
+            throw err;
+
+        res.send(result +result['n']+' test data added!');
+    })
+});
+
 module.exports = router;

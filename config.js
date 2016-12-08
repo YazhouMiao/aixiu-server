@@ -3,6 +3,12 @@
  * 应用配置信息
  */
 
+// 应用配置信息
+exports.app = {
+    port: 3000,
+
+}
+
 // MongoDB配置信息
 exports.db = {
     host: 'localhost',

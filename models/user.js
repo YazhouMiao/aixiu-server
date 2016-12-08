@@ -71,3 +71,22 @@ exports.insetTestData = function insetTestData(num,fn) {
         });
     });
 }
+
+// 删除测试数据
+exports.deleteUser = function(condition,callback){
+    let queryCon = {};
+    // 姓名
+    if(condition.name!==undefined){
+        queryCon.name = condition.name;
+    }
+    // 性别
+    if(condition.sex!==undefined){
+        queryCon.sex = condition.sex;
+    }
+    // 年龄
+    if(condition.age!==undefined){
+        queryCon.age = condition.age;
+    }
+
+    User.remove(queryCon,callback);
+}
