@@ -8,6 +8,7 @@ var ejs = require('ejs');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var chat = require('./routes/chat');
 
 var app = express();
 
@@ -27,8 +28,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(favicon(path.join(__dirname,'/favicon.ico')));
 app.use('/', routes);
-//app.use('/test', routes);
 app.use('/users', users);
+app.use('/chat', chat);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
