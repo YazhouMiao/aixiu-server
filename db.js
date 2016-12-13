@@ -1,9 +1,13 @@
 var mongoose = require('mongoose');
-var dbUrl = require('./config').dbUrl;
+var dbConfig = require('./config').db;
 
 // 连接数据库
-mongoose.createConnection(dbUrl);
+var opt = {
+    user: dbConfig.user,
+    pass: dbConfig.pwd,
+    auth: {
+        authdb: 'aixiu'
+    }
+};
 
-console.log('connections:'+mongoose.connections.length);
-
-module.exports = mongoose.connection;
+module.exports = mongoose.createConnection(dbConfig.host,'aixiu',dbConfig.port,opt);

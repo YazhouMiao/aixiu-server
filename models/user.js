@@ -1,22 +1,11 @@
 var async = require('async');
 var mongoose = require('mongoose');
-var dbConfig = require('../config').db;
-
-// 连接数据库
-var opt = {
-    user: dbConfig.user,
-    pass: dbConfig.pwd,
-    auth: {
-        authdb: 'aixiu'
-    }
-};
-var conn = mongoose.createConnection(dbConfig.host,'aixiu',dbConfig.port,opt);
-
-var Schema = mongoose.Schema;
+var conn = require('../db');
 
 // 定义user对象模型
-var UserSchema = new Schema({
-    name: String,
+var UserSchema = new mongoose.Schema({
+    username: String,
+    password: String,
     age: Number,
     sex: Number,
     job: String,
