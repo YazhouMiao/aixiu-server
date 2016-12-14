@@ -1,21 +1,26 @@
 var async = require('async');
 var mongoose = require('mongoose');
+var localMongoosePlugin = require('passport-local-mongoose');
 var conn = require('../db');
 
 // 定义user对象模型
 var UserSchema = new mongoose.Schema({
-    username: String,
+    username: {type:String,unique:true},
     password: String,
     age: Number,
     sex: Number,
+    birthday: Date,
     job: String,
     country: String
 }, { collection: "user" });
 
+// 使用登陆插件
+UserSchema.plugin(localMongoosePlugin);
+
 var User = conn.model('User',UserSchema);
 
 // 获取用户列表
-exports.user = function(condition={},callback) {
+User.users = function(condition={},callback) {
     let queryCon = {};
     // 姓名
     if(condition.name!==undefined){
@@ -34,7 +39,7 @@ exports.user = function(condition={},callback) {
 }
 
 // 插入测试数据
-exports.insetTestData = function insetTestData(num,fn) {
+User.insetTestData = function insetTestData(num,fn) {
     num = !isNaN(num) ? num : 1;
 
     User.count({},function (err, sum) {
@@ -62,7 +67,7 @@ exports.insetTestData = function insetTestData(num,fn) {
 }
 
 // 删除测试数据
-exports.deleteUser = function(condition,callback){
+User.deleteUser = function(condition,callback){
     let queryCon = {};
     // 姓名
     if(condition.name!==undefined){
@@ -79,3 +84,5 @@ exports.deleteUser = function(condition,callback){
 
     User.remove(queryCon,callback);
 }
+
+module.exports = User;
