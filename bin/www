@@ -9,7 +9,6 @@ var debug = require('debug')('aixiu-server:server');
 var http = require('http');
 var cluster = require('cluster');
 var numCPUs = require('os').cpus().length;
-var io = require('socket.io');
 
 /**
  * Get port from environment and store in Express.
@@ -33,6 +32,13 @@ if (cluster.isMaster) {
     cluster.fork();
     console.log('died worker restarted');
   });
+
+  // 接收到终止主进程信号
+  process.on('SIGINT',function(){
+    // TODO:
+    console.log('main proccess died!');
+    process.exit();
+  });
 } else {
 
   var httpServer = http.createServer(app);
@@ -40,35 +46,15 @@ if (cluster.isMaster) {
   /**
    * Listen on provided port, on all network interfaces.
    */
-
-  // socket服务
-  var socketServer = io(httpServer);
-
   httpServer.listen(port,function(){
     console.log('listening on *:3000');
   });
+
+  // socket服务
+  require('../socket/init').init(httpServer);
+
   httpServer.on('error', onError);
   httpServer.on('listening', onListening);
-
-  // socket监听
-  socketServer.on('connection', function(socket){
-    console.log('a user connected');
-
-    socket.on('disconnected',function(){
-      console.log('user disconnected');
-    });
-
-    socket.on('chat message', function(msg){
-      console.log('message: ' + msg);
-      socket.emit('chat message',{msg:'hello'});
-    });
-  });
-
-  // 接收到终止主进程信号
-  process.on('SIGINT',function(){
-    // TODO:
-    console.log('main proccess died!');
-  });
 }
 
 /**
