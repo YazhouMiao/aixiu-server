@@ -9,6 +9,8 @@ var debug = require('debug')('aixiu-server:server');
 var http = require('http');
 var cluster = require('cluster');
 var numCPUs = require('os').cpus().length;
+var io = require('socket.io');
+var socketApp = require('../socketApp');
 
 /**
  * Get port from environment and store in Express.
@@ -27,6 +29,8 @@ if (cluster.isMaster) {
   }
   cluster.on('exit', function(worker, code, signal) {
     console.log('worker ' + worker.process.pid + ' died');
+    // 删除变量等待回收
+    delete worker.process;
 
     // 重启进程
     cluster.fork();
@@ -50,11 +54,12 @@ if (cluster.isMaster) {
     console.log('listening on *:3000');
   });
 
-  // socket服务
-  require('../socket/init').init(httpServer);
-
   httpServer.on('error', onError);
   httpServer.on('listening', onListening);
+
+  // socket服务
+  var socketServer = io(httpServer);
+  socketServer.on('connection',socketApp);
 }
 
 /**

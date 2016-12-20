@@ -1,18 +1,12 @@
 /*
  * 一对一聊天
  */
-var socketServer = require('./init').server;
+var chat = {};
+chat.message = 'chat message';
+chat.handle = function(msg){
+    console.log('message: ' + msg);
 
-// socket监听
-socketServer.on('connection', function (socket) {
-    console.log('a user connected');
+    this.emit('chat message', {msg: 'hello'});
+}
 
-    socket.on('disconnected', function () {
-        console.log('user disconnected');
-    });
-
-    socket.on('chat message', function (msg) {
-        console.log('message: ' + msg);
-        socket.emit('chat message', {msg: 'hello'});
-    });
-});
+module.exports = chat;
