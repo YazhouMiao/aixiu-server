@@ -11,8 +11,9 @@
         form { background: #000; padding: 3px; position: relative; width: 100%;}
         form input { border-right: 1px #222; padding: 10px 0; width: 300px; }
         form button { width: 94px; background: rgb(130, 224, 255); padding: 10px; }
-        .client {background-color:#ddd;}
-        .server {background-color:#fff}
+        .from {background-color:#ddd;}
+        .to {background-color:#fff}
+        .server {background-color:#e0e0e0}
     </style>
 </head>
 <body>
@@ -22,18 +23,33 @@
         <input id="m" autocomplete="off" /><button>Send</button>
     </form>
 </div>
-<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="/socket.io/socket.io.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
     var socket = io();
+
+    var from = '<%=user%>';
+    // 新建用户
+    socket.emit('new user', from);
+    var to ='';
+    if(from == 'myzhou'){
+        to = 'myzhou1991';
+    } else {
+        to = 'myzhou'
+    }
     $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
-        $('#messages').append($('<li class="client">').html('<span>client:'+$('#m').val()+'</span>'));
+        socket.emit('message', from,to,$('#m').val());
+        $('#messages').append($('<li class="from">').html('<span>client:'+$('#m').val()+'</span>'));
         $('#m').val('');
         return false;
     });
-    socket.on('chat message', function(obj){
-        $('#messages').append($('<li class="server">').html('<span>server:'+obj.msg+'</span>'));
+
+    socket.on('message', function(from,msg){
+        $('#messages').append($('<li class="to">').html('<span>'+from+':'+msg+'</span>'));
+    });
+
+    socket.on('system-message', function(msg){
+        $('#messages').append($('<li class="server">').html('<span>server:'+msg+'</span>'));
     });
 </script>
 </body>

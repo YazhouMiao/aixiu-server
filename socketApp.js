@@ -9,12 +9,30 @@ var chat = require('./socket/chat');
 function handle(socket){
     console.log('a user connected');
 
-    socket.on('disconnected', function () {
+    socket.on('disconnect', function () {
         console.log('user disconnected');
     });
 
-    validCheck(chat);
-    socket.on(chat.message, chat.handle);
+    var users = [];
+    socket.on('new user',function(user){
+        if(!(user in users)){
+            users[user] = socket;
+            console.log('new user:'+user);
+        }
+    });
+
+    socket.on('message',function(from,to,msg){
+        if(from in users){
+            users[from].emit('message',from,msg);
+        } else {
+            socket.emit('system-message','Sorry,'+to+' is not online');
+        }
+
+        console.log(from+' to '+to+' '+msg);
+    });
+
+    //validCheck(chat);
+    //socket.on(chat.message, chat.handle);
 }
 
 function validCheck(obj={}){
