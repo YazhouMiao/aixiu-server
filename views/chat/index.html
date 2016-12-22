@@ -14,6 +14,7 @@
         .from {background-color:#ddd;}
         .to {background-color:#fff}
         .server {background-color:#e0e0e0}
+        .time {float:right;}
     </style>
 </head>
 <body>
@@ -38,18 +39,21 @@
         to = 'myzhou'
     }
     $('form').submit(function(){
+        var now = new Date().toLocaleString();
         socket.emit('message', from,to,$('#m').val());
-        $('#messages').append($('<li class="from">').html('<span>client:'+$('#m').val()+'</span>'));
+        $('#messages').append($('<li class="from">').html('<span>client:'+$('#m').val()+'</span><span class="time">'+now+'</span>'));
         $('#m').val('');
         return false;
     });
 
     socket.on('message', function(from,msg){
-        $('#messages').append($('<li class="to">').html('<span>'+from+':'+msg+'</span>'));
+        var now = new Date().toLocaleString();
+        $('#messages').append($('<li class="to">').html('<span>'+from+':'+msg+'</span><span class="time">'+now+'</span>'));
     });
 
     socket.on('system-message', function(msg){
-        $('#messages').append($('<li class="server">').html('<span>server:'+msg+'</span>'));
+        var now = new Date().toLocaleString();
+        $('#messages').append($('<li class="server">').html('<span>server:'+msg+'</span><span class="time">'+now+'</span>'));
     });
 </script>
 </body>

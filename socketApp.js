@@ -5,30 +5,38 @@
  * obj.handle：处理内容
  */
 var chat = require('./socket/chat');
-
+var users = [];
+console.log('process:'+process.pid);
 function handle(socket){
     console.log('a user connected');
+    console.log('process:'+process.pid);
 
     socket.on('disconnect', function () {
         console.log('user disconnected');
+        console.log('process:'+process.pid);
     });
 
-    var users = [];
     socket.on('new user',function(user){
         if(!(user in users)){
             users[user] = socket;
             console.log('new user:'+user);
         }
+
+        for(let user in users){
+            console.log(user);
+        }
+        console.log('process:'+process.pid);
     });
 
     socket.on('message',function(from,to,msg){
-        if(from in users){
-            users[from].emit('message',from,msg);
+        if(to in users){
+            users[to].emit('message',from,msg);
         } else {
             socket.emit('system-message','Sorry,'+to+' is not online');
         }
 
         console.log(from+' to '+to+' '+msg);
+        console.log('process:'+process.pid);
     });
 
     //validCheck(chat);
