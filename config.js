@@ -16,3 +16,9 @@ exports.db = {
     user: 'admin',
     pwd:  'MYzhou1991'
 };
+
+// redis配置信息
+exports.redis = {
+    host: 'localhost',
+    port: 6379,
+}
