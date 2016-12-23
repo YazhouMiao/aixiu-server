@@ -5,14 +5,16 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font: 13px Helvetica, Arial; }
-        #messages { list-style-type: none; margin: 0; padding: 0; overflow: hidden;
+        #messages { list-style-type: none; margin: 0; padding: 0; overflow: scroll;
             height: 500px;border: 1px solid #222;background-color: #f2f2f2;}
         #messages li { padding: 5px 10px; }
         form { background: #000; padding: 3px; position: relative; width: 100%;}
         form input { border-right: 1px #222; padding: 10px 0; width: 300px; }
         form button { width: 94px; background: rgb(130, 224, 255); padding: 10px; }
-        .client {background-color:#ddd;}
-        .server {background-color:#fff}
+        .from {background-color:#ddd;}
+        .to {background-color:#fff}
+        .server {background-color:#e0e0e0}
+        .time {float:right;}
     </style>
 </head>
 <body>
@@ -22,18 +24,36 @@
         <input id="m" autocomplete="off" /><button>Send</button>
     </form>
 </div>
-<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="/socket.io/socket.io.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
     var socket = io();
+
+    var from = '<%=user%>';
+    // 新建用户
+    socket.emit('new user', from);
+    var to ='';
+    if(from == 'myzhou'){
+        to = 'myzhou1991';
+    } else {
+        to = 'myzhou'
+    }
     $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
-        $('#messages').append($('<li class="client">').html('<span>client:'+$('#m').val()+'</span>'));
+        var now = new Date().toLocaleString();
+        socket.emit('message', from,to,$('#m').val());
+        $('#messages').append($('<li class="from">').html('<span>client:'+$('#m').val()+'</span><span class="time">'+now+'</span>'));
         $('#m').val('');
         return false;
     });
-    socket.on('chat message', function(obj){
-        $('#messages').append($('<li class="server">').html('<span>server:'+obj.msg+'</span>'));
+
+    socket.on('message', function(from,msg){
+        var now = new Date().toLocaleString();
+        $('#messages').append($('<li class="to">').html('<span>'+from+':'+msg+'</span><span class="time">'+now+'</span>'));
+    });
+
+    socket.on('system-message', function(msg){
+        var now = new Date().toLocaleString();
+        $('#messages').append($('<li class="server">').html('<span>server:'+msg+'</span><span class="time">'+now+'</span>'));
     });
 </script>
 </body>
