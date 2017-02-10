@@ -39,22 +39,24 @@
         to = 'myzhou'
     }
     $('form').submit(function(){
-        var now = new Date().toLocaleString();
         socket.emit('message', from,to,$('#m').val());
-        $('#messages').append($('<li class="from">').html('<span>client:'+$('#m').val()+'</span><span class="time">'+now+'</span>'));
+        $('#messages').append($('<li class="from">').html('<span>client:'+$('#m').val()+'</span><span class="time">'+formatTime()+'</span>'));
         $('#m').val('');
         return false;
     });
 
     socket.on('message', function(from,msg){
-        var now = new Date().toLocaleString();
-        $('#messages').append($('<li class="to">').html('<span>'+from+':'+msg+'</span><span class="time">'+now+'</span>'));
+        $('#messages').append($('<li class="to">').html('<span>'+from+':'+msg+'</span><span class="time">'+formatTime()+'</span>'));
     });
 
     socket.on('system-message', function(msg){
-        var now = new Date().toLocaleString();
-        $('#messages').append($('<li class="server">').html('<span>server:'+msg+'</span><span class="time">'+now+'</span>'));
+        $('#messages').append($('<li class="server">').html('<span>server:'+msg+'</span><span class="time">'+formatTime()+'</span>'));
     });
+
+    function formatTime(){
+        var date = new Date();
+        return '' + (date.getMonth()+1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+    }
 </script>
 </body>
 </html>
